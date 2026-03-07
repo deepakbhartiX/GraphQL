@@ -3,7 +3,7 @@
 function errorHandler(err,req,res,next){
 
     console.log(`message:${err.message}`)
-    res.status(err.statusCode || 5000).json({
+    res.status(err.statusCode || 500).json({
         status:'error',
         message:err.message||"Internal Server Error"
     })

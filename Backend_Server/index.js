@@ -1,9 +1,10 @@
-//Error Handlers
-const {asynchandler} = require('../error_handling/async_handler')
+//Error Handlers - note: only use with expres routes graphql handle their own error internally so it don't use any expresss error handler middleware
 
-const {AppError} = require('../error_handling/custom_error')
+// const {asynchandler} = require('../error_handling/async_handler')
 
-const {errorHandler} = require('../error_handling/global_error')
+// const {AppError} = require('../error_handling/custom_error')
+
+// const {errorHandler} = require('../error_handling/global_error')
 
 //modules
 
@@ -31,7 +32,7 @@ const  resolvers = {
   Query: {
    products:
     async () => {
-      const { data } = await axios.get("https://dummyjson.com/products");
+      const {data} = await axios.get("https://dummyjson.com/products");
       return data.products;
   }
   }
@@ -65,21 +66,39 @@ startServer();
 
 
 
-const test = async() =>(await axios.get("https://dummyjson.com/products")).data
-   
+//Note always rememeber to use return value form functino beacause await async and promisse does't return anything own it own
 
 
-// (async () => {
-//   const data = await test();
-//   console.log(data);
-// })(); 
+//gettting data using promissi return by axios by defult
 
-// async function fetchdata()  {
-//   const res = await test()
-//   console.log(res); 
+// const test3 = () =>{ return(axios.get("https://dummyjson.com/products").then(res=>res.data.products))}
+
+
+// test3().then(console.log)
+
+
+//gettting data async data using async function 
+// const test = async() =>{const {data} = await axios.get("https://dummyjson.com/products") 
+// return data
 // }
 
-// fetchdata()  
+// (async function result(){
+//   const result = await test()
+//     console.log(result);
+// })()
 
 
-console.log('eehlo');
+//getting async data using callback function
+
+// const test2 = async(laamo) =>{ await axios.get("https://dummyjson.com/products").then(res=>laamo(res))}
+
+  // test2(lol=>{
+  //   console.log(lol);
+  // }) 
+
+
+
+// const test3 = async() =>{return (await axios.get("https://dummyjson.com/products")).data}
+
+
+
