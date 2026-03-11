@@ -20,30 +20,57 @@ const typeDefs = `#graphql
   type Query {
     hello: String
     products:[Product]
+    getallUsers:[allUsers]
+    getUser(id:ID!):User
   }
 
+   type User {
+    id:ID
+    firstName:String
+    lastName:String
+    age: String
+    gender:String   
+   }
+  type allUsers{
+    id:ID
+    firstName:String
+    lastName:String
+    age: String
+    gender:String 
+  }
   type Product{
    id:ID
    title:String
   }
 `;
 
-const  resolvers = {
+const resolvers = {
   Query: {
-   products:
-    async () => {
-      const {data} = await axios.get("https://dummyjson.com/products");
-      return data.products;
+    products:
+      async () => {
+        const { data } = await axios.get("https://dummyjson.com/products");
+        return data.products;
+      },
+    getallUsers:
+      async () => {
+        // return[{id:1,name:"deepak",age:44}]
+        const { data } = await axios.get(`https://dummyjson.com/users`);
+        return data.users;
+      },
+
+    getUser: async (parent, { id }) => {
+      const { data } = await axios.get(`https://dummyjson.com/users/${id}`);
+      return data;
+    }
   }
-  }
-  
+
 };
 
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
-     resolvers,
-     csrfPrevention: false
+    resolvers,
+    csrfPrevention: false
   });
 
   await server.start();
@@ -59,7 +86,7 @@ async function startServer() {
     console.log("Server running at http://localhost:4000/graphql");
   });
 
-  
+
 }
 
 startServer();
@@ -94,9 +121,9 @@ startServer();
 
 // const test2 = async(laamo) =>{ await axios.get("https://dummyjson.com/products").then(res=>laamo(res))}
 
-  // test2(lol=>{
-  //   console.log(lol);
-  // }) 
+// test2(lol=>{
+//   console.log(lol);
+// }) 
 
 
 
@@ -104,3 +131,10 @@ startServer();
 
 
 
+
+//checking user api 
+
+// const test3 = () => { return (axios.get(`https://dummyjson.com/users/`).then(res=> res.data.users)) } //giving object array by default so penterating object to get array eg - .users
+
+
+// test3().then(console.log)
