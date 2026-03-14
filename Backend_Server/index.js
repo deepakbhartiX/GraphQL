@@ -29,7 +29,8 @@ const typeDefs = `#graphql
     firstName:String
     lastName:String
     age: String
-    gender:String   
+    gender:String
+   
    }
   type allUsers{
     id:ID
@@ -41,10 +42,15 @@ const typeDefs = `#graphql
   type Product{
    id:ID
    title:String
+   user:User
   }
 `;
 
 const resolvers = {
+  Product:{user:async(user)=>{
+      const { data } = await axios.get(`https://dummyjson.com/users/${user.id}`);
+      return data;}
+  },
   Query: {
     products:
       async () => {
@@ -65,7 +71,7 @@ const resolvers = {
   }
 
 };
-
+ 
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -87,9 +93,10 @@ async function startServer() {
   });
 
 
-}
+} 
 
 startServer();
+
 
 
 //Testing Async Function
